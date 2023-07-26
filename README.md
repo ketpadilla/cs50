@@ -143,6 +143,8 @@ This repository contains all the laboratories and problem sets I did during CS50
 ### _Laguages and Tools Used:_ <img src="https://img.icons8.com/ios/250/FFFFFF/info.png" width="25" align="left">
 
 <div>
+  <!--- C ---> 
+  <img src="https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white">
   <!--- HTML ---> 
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
   <!--- CSS ---> 
