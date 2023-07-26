@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Buy
+{% endblock %}
+
+{% block main %}
+
+<h1> Sell Stock</h1>
+<hr class="border border-dark border-1">
+<form action="/sell" method="post">
+    <!-- Stock Symbol -->
+    <div class="input-group mb-3 justify-content-center">
+        <span class="input-group-text" id="basic-addon1">%</span>
+        <span>
+            <select class="form-control mx-auto w-auto" id="symbol" name="symbol">
+                <option disabled selected hidden>Stock Symbol</option>
+                {% for index in symbol %}
+                <option value="{{ index }}">{{ index }}</option>
+                {% endfor %}
+            </select>
+        </span>
+    </div>
+
+    <!-- Number of Shares -->
+    <div class="input-group mb-3 justify-content-center">
+        <span class="input-group-text" id="basic-addon1">@</span>
+        <span>
+            <input autocomplete autofocus class="form-control mx-auto w-auto" id="shares" name="shares" placeholder="Number of Shares" type="number" min="1">
+        </span>
+    </div>
+
+    <!-- Buy Button -->
+    <div class="input-group-append">
+        <button class="btn btn-primary" type="submit">Sell</button>
+    </div>
+</form>
+
+{% if alert_message %}
+    <div class="alert alert-danger mx-auto w-auto my-3" role="alert">
+        {{ alert_message }}
+    </div>
+{% endif %}
+
+{% endblock %}

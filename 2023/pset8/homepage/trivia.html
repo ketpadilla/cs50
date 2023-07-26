@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link href="trivia.css" rel="stylesheet"> <!-- Add trivia.css file -->
+    <title>Trivia!</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // When the DOM is fully loaded and ready
+
+            // Get the correct answer button
+            let correct = document.querySelector('.correct');
+
+            // Add click event listener to the correct answer button
+            correct.addEventListener('click', function(event) {
+                // Check if the button has already been clicked (green color)
+                if (correct.style.backgroundColor === 'green') {
+                    // Button has already been clicked, reset button styles
+                    resetButtons();
+                } else {
+                    // Reset the button styles and feedback messages
+                    resetButtons();
+                    correct.style.backgroundColor = 'green';
+                    document.querySelector('#feedback1').innerHTML = 'Correct!';
+                }
+            });
+
+            // Get all incorrect answer buttons
+            let incorrects = document.querySelectorAll('.incorrect');
+
+            // Add click event listener to each incorrect answer button
+            for (let i = 0; i < incorrects.length; i++) {
+                let incorrect = incorrects[i];
+                incorrect.addEventListener('click', function(event) {
+                    // Check if the button has already been clicked (red color)
+                    if (incorrect.style.backgroundColor === 'red') {
+                        // Button has already been clicked, reset button styles
+                        resetButtons();
+                    } else {
+                        // Reset the button styles and feedback messages
+                        resetButtons();
+                        incorrect.style.backgroundColor = 'red';
+                        document.querySelector('#feedback1').innerHTML = 'Incorrect';
+                    }
+                });
+            }
+
+            // Get the check button
+            let checkButton = document.querySelector('#check');
+
+            // Add click event listener to the check button
+            checkButton.addEventListener('click', function() {
+                // Get the input field value
+                let input = document.querySelector('input');
+
+                // Check if the input field value is correct
+                if (input.value === 'Paris') {
+                    // Set input field background color to green
+                    input.style.backgroundColor = 'green';
+                    document.querySelector('#feedback2').innerHTML = 'Correct!';
+                } else {
+                    // Set input field background color to red
+                    input.style.backgroundColor = 'red';
+                    document.querySelector('#feedback2').innerHTML = 'Incorrect';
+                }
+            });
+
+            // Get the input field
+            let inputField = document.querySelector('input');
+
+            // Add input event listener to the input field
+            inputField.addEventListener('input', function() {
+                // Get the input field
+                let input = document.querySelector('input');
+
+                // Check if the input field is empty
+                if (input.value === '') {
+                    // Reset the input field background color and feedback message
+                    input.style.backgroundColor = '';
+                    document.querySelector('#feedback2').innerHTML = '';
+                }
+            });
+
+            // Add keypress event listener to the input field
+            inputField.addEventListener('keypress', function(event) {
+                // Check if Enter key is pressed
+                if (event.key === 'Enter') {
+                    // Trigger the click event on the check button
+                    document.querySelector('#check').click();
+                }
+            });
+
+            // Reset the button styles and feedback messages
+            function resetButtons() {
+                // Get all buttons
+                let buttons = document.querySelectorAll('button');
+
+                // Loop through each button
+                for (let i = 0; i < buttons.length; i++) {
+                    // Reset button background color
+                    buttons[i].style.backgroundColor = '';
+                }
+
+                // Reset feedback message
+                document.querySelector('#feedback1').innerHTML = '';
+            }
+        });
+    </script>
+</head>
+<body>
+    <!-- Load the Navbar -->
+    <div id="navbarContainer"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Trivia!</h1>
+            <p>This is my version of CS50's Lab 8.</p> <!-- New paragraph -->
+        </div>
+
+        <div class="section">
+            <!-- Part 1: Multiple Choice section -->
+            <h2>Part 1: Multiple Choice</h2>
+            <hr>
+            <h3>What is known as the "Red Planet"</h3>
+            <button class="correct">Mars</button> <!-- Correct answer button -->
+            <button class="incorrect">Jupiter</button> <!-- Incorrect answer button -->
+            <button class="incorrect">Saturn</button> <!-- Incorrect answer button -->
+            <p id="feedback1"></p> <!-- Feedback message for Part 1 -->
+        </div>
+
+        <div class="section">
+            <!-- Part 2: Free Response section -->
+            <h2>Part 2: Free Response</h2>
+            <hr>
+            <h3>What is the capital city of France?</h3>
+            <input type="text"> <!-- Input field for free response -->
+            <button id="check">Check Answer</button> <!-- Button to check the answer -->
+            <p id="feedback2"></p> <!-- Feedback message for Part 2 -->
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#navbarContainer").load("navbar.html", function () {
+                $(".navbar-collapse").removeClass("show");
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

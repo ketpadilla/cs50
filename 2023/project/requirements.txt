@@ -1,0 +1,5 @@
+cs50
+Flask
+sympy
+pint
+inflect

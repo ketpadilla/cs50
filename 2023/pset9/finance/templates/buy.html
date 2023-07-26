@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Buy
+{% endblock %}
+
+{% block main %}
+
+<h1> Buy Stock</h1>
+<hr class="border border-dark border-1">
+<form action="/buy" method="post">
+    <!-- Stock Symbol -->
+    <div class="input-group mb-3 justify-content-center">
+        <span class="input-group-text" id="basic-addon1">%</span>
+        <span>
+            <input autocomplete autofocus class="form-control mx-auto w-auto" id="symbol" name="symbol" placeholder="Stock Symbol" type="text">
+        </span>
+    </div>
+
+    <!-- Number of Shares -->
+    <div class="input-group mb-3 justify-content-center">
+        <span class="input-group-text" id="basic-addon1">@</span>
+        <span>
+            <input autocomplete autofocus class="form-control mx-auto w-auto" id="shares" name="shares" placeholder="Number of Shares" type="number" min="1">
+        </span>
+    </div>
+
+    <!-- Buy Button -->
+    <div class="input-group-append">
+        <button class="btn btn-primary" type="submit">Buy</button>
+    </div>
+</form>
+
+<!-- Try to make button stand on the side of input -->
+<!-- Shares input -->
+
+{% endblock %}
