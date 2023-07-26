@@ -1,0 +1,11 @@
+sort1 uses: bubble sort
+
+How do you know?: It is the fastest sorting algorithm for the random text files
+
+sort2 uses: merge sort
+
+How do you know?: It is the fastest sorting algorithm for the reversed text files
+
+sort3 uses: selection sort
+
+How do you know?: It is the fastest sorting algorithm for the sorted text files

@@ -1,0 +1,313 @@
+{% extends "layout.html" %}
+{% block title %} {{ topic }} {% endblock %} {%
+block main %}
+<div class="container">
+  <!-- Topic Title -->
+  <div class="row">
+    <div class="col-12 col-sm-12">
+      <h1 class="text-uppercase fw-bold text-start lh-1">{{ topic }}</h1>
+      <h6 class="text-uppercase text-start">{{ category }}</h6>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="row">
+    <!-- Right Side -->
+    <div class="col-12 col-sm-9 d-flex justify-content-start">
+      <form id="options-form" action="/worksheet">
+        <div class="btn-group" data-toggle="buttons">
+          <input type="radio" class="btn-check" name="options" id="easy" autocomplete="off" value="easy" />
+          <label class="btn btn-light mb-2" for="easy">Easy</label>
+
+          <input type="radio" class="btn-check" name="options" id="standard" autocomplete="off" value="standard" />
+          <label class="btn btn-light mb-2" for="standard">Standard</label>
+
+          <input type="radio" class="btn-check" name="options" id="hard" autocomplete="off" value="hard" disabled/>
+          <label class="btn btn-light mb-2" for="hard">Hard</label>
+        </div>
+      </form>
+    </div>
+    <!-- Left Side -->
+    <div class="col-12 col-sm-3 d-flex justify-content-sm-start justify-content-md-end">
+      <button type="button" name="end" class="btn btn-outline-light mb-2" data-bs-toggle="modal"
+        data-bs-target="#finishModal" disabled>
+        Finish
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- CARD -->
+    <div class="card mx-auto my-3" style="width: 98%; min-height: 10rem">
+      <p class="mt-2 text-start" style="color: var(--dark-color)">
+        {{ question | safe }}
+      </p>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col">
+      <!-- * CSS: Change background and text color via style if answer is right or wrong -->
+      <form id="answer-form" action="/worksheet" method="post">
+        <span class="input-group justify-content-start">
+          <span class="input-group-text" id="basic-addon1">#</span>
+          <span>
+            <input autofocus class="form-control mx-auto w-auto" name="number" id="number-input" type="text"
+              placeholder="Number" value="{{ submittedNumber }}" />
+          </span>
+
+          <span>
+            <select autofocus class="form-select ms-3 w-auto text-muted my-sm-1 my-md-0" id="unit" name="unit">
+              <option disabled selected class="text-secondary">Unit</option>
+              {% for option in unit %} {% if option == submittedUnit %}
+              <option value="{{ option }}" selected>{{ option }}</option>
+              {% else %}
+              <option value="{{ option }}">{{ option }}</option>
+              {% endif %} {% endfor %}
+            </select>
+          </span>
+        </span>
+      </form>
+      <p class="container my-2 text-start">Number of Significant Digits: 2</p>
+    </div>
+
+    <!-- Left Side -->
+    <div class="col-12 col-sm-6 d-flex justify-content-sm-start justify-content-md-end">
+      <form accept="/worksheeet">
+        <input type="hidden" name="next" value="{{ difficulty }}">
+        <button class="btn btn-tertiary" id="next-button" disabled>Next</button>
+      </form>
+      <form action="/worksheet" method="post" onsubmit="submitForm(event)">
+        <input type="checkbox" class="btn-check" name="solution" id="btn-check" autocomplete="off" disabled />
+        <label class="btn btn-secondary" for="btn-check">Solution</label>
+        <button class="btn btn-primary" type="submit" id="submit-button">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="row" style="display: none;" id="solution-div">
+    <!-- SOLUTION -->
+    <div class="card mx-auto my-3" style="width: 98%; min-height: 10rem">
+      <p class="mt-2 text-start" style="color: var(--dark-color)">
+        {{ solution | safe }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Finish Modal -->
+  <div class="modal fade" id="finishModal" tabindex="-1" aria-labelledby="finishModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="finishModalLabel">FINISH SESSION</h5>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to finish the session?
+          <p>Your Current Score is <span style="color: var(--comp-color);">{{ score }}</span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <!-- Submit the form with the updated values if "Yes" is clicked -->
+          <form action="/worksheet" method="post" id="finish-form" style="display: inline;">
+            <input type="hidden" name="end" value="end">
+            <button type="submit" class="btn btn-primary">Yes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Modal -->
+  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="errorModalLabel">ERROR</h5>
+        </div>
+        <div class="modal-body">
+          Fill in both the Number and Unit inputs before submitting.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Modal -->
+  <div class="modal fade" id="invalidNumberModal" tabindex="-1" aria-labelledby="invalidNumberModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="invalidNumberModalLabel">ERROR</h5>
+        </div>
+        <div class="modal-body">
+          The number you entered is invalid. Please enter a positive integer.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- All Solved Modal -->
+  <div class="modal fade" id="allSolvedModal" tabindex="-1" aria-labelledby="allSolvedModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="allSolvedModalLabel">ALL QUESTIONS SOLVED</h5>
+        </div>
+        <div class="modal-body">
+          Congratulations! You have solved all the questions for {{ difficulty }} difficulty.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // INITIAL PAGE SETUP (ENSURE INTENDED BEHAVIOR)
+  // Get the 'clear' value and clear sessionStorage if it's 'true'
+  const clearValue = "{{ clear }}";
+  if (clearValue === 'true') sessionStorage.clear();
+
+  // Get 'allSolved' and 'difficulty' values from the template
+  const allSolvedValue = '{{ allSolved | safe }}';
+  const difficulty = '{{ difficulty }}';
+
+  // Use 'allSolvedValue' or get it from sessionStorage if empty
+  const allSolved = allSolvedValue.trim() || sessionStorage.getItem('allSolved');
+
+  // Disable submit button if difficulty length is zero
+  const submitButton = document.getElementById("submit-button");
+  submitButton.disabled = !difficulty.length;
+
+  // Check if 'allSolved' is true, set it in sessionStorage, and show "All Solved" modal
+  if (allSolved && (sessionStorage.setItem('allSolved', allSolved), 1)) {
+    // Extract the words from 'allSolved' using regex and create an array of objects
+    const words = allSolved.match(/"([^"]*)":\s*"([^"]*)"/g).map(match => {
+      const [_, key, value] = match.match(/"([^"]*)":\s*"([^"]*)"/);
+      return { key, value };
+    });
+
+    // Array of difficulty levels to loop through
+    const difficultyLevels = ['easy', 'standard', 'hard'];
+
+    // Loop through each difficulty level and disable corresponding buttons based on 'words'
+    difficultyLevels.forEach(name => {
+      const difficultyButton = document.querySelector(`input[name="options"][value="${name}"]`);
+      difficultyButton.disabled = words.some(({ key, value }) => key.toLowerCase() === name && value === "true");
+    });
+
+    // Show the 'All Solved' modal if 'allSolvedValue' is true
+    if (allSolvedValue) new bootstrap.Modal(document.getElementById("allSolvedModal")).show();
+  }
+
+  // OPTIONS FORM ELEMENT (DIFFICULTY BUTTONS)
+  // Get the options form element and its buttons
+  const optionsForm = document.getElementById("options-form");
+  const buttons = optionsForm.querySelectorAll('input[name="options"]');
+
+  // Function to handle the form submission
+  const submitOptionsForm = event => {
+    event.preventDefault(); // Prevent default form submission
+    optionsForm.submit(); // Submit form
+  };
+
+  // Iterate through each button and set up event listeners
+  buttons.forEach(button => {
+    // Disable and check the button if its value matches 'difficulty'
+    if (button.value === difficulty) button.disabled = button.checked = true;
+    // Add a 'click' event listener to each button calling 'submitOptionsForm'
+    button.addEventListener("click", submitOptionsForm);
+  });
+
+  // FINISH BUTTON
+  // Function to handle enabling/disabling the Finish button
+  const enableFinishButton = () => {
+    // Get the Finish button element
+    const finishButton = document.querySelector('button[name="end"]');
+    // Enable or disable finish button depending if question text is not empty and allSolvedValue is true
+    finishButton.disabled = !("{{ question | safe }}".trim() || allSolvedValue);
+  };
+
+  // Call enableFinishButton on page load
+  enableFinishButton();
+
+  // FORM VALIDATION AND SUBMISSION (NUMBER AND UNIT INPUTS)
+  // Function to show modals if not previously triggered
+  const showModal = (modalElement) => !new bootstrap.Modal(modalElement)._isShown && new bootstrap.Modal(modalElement).show();
+
+  // Function to check the validity of inputs
+  const areInputsValid = () => {
+    // Get the values from the input fields and trim leading/trailing whitespaces
+    const numberInput = document.getElementById("number-input").value.trim();
+    const unitInput = document.getElementById("unit").value.trim();
+    // Check if the number is a valid positive number (integer or decimal)
+    const isValidNumber = /^-?\d*\.?\d+$/.test(numberInput) && parseFloat(numberInput) !== 0;
+    // Show modal if the number is invalid and not empty
+    if (!isValidNumber && numberInput !== "" && unitInput !== "Unit") {
+      showModal(document.getElementById("invalidNumberModal"));
+    }
+    // Check if both inputs are not empty, and number is valid
+    return numberInput !== "" && unitInput !== "Unit" && isValidNumber;
+  };
+
+  // Function to handle form submission
+  const submitForm = event => {
+    event.preventDefault();
+    // Check if inputs are valid and submit the form if true
+    if (areInputsValid()) {
+      document.getElementById("answer-form").submit();
+    } // Show the error modal if either input or unit is empty
+    else if (document.getElementById("number-input").value.trim() === "" || document.getElementById("unit").value.trim() === "Unit") {
+      showModal(document.getElementById("errorModal"));
+    }
+  };
+
+  // CHECK HANDLING (PROMPT CORRECT OR INCORRECT)
+  // Function to set background color of an element by its ID
+  function setBackgroundColorById(elementId, color) { // Get the element by its ID
+    const element = document.getElementById(elementId);
+    if (element) { // Set element's background color
+      element.style.backgroundColor = color;
+    }
+  }
+
+  // Retrieve and parse the value of CORRECT_ANSWER
+  const correctAnswerValue = JSON.parse('{{ correctAnswer | safe }}');
+
+  // Set the background color of number and unit inputs based on their correctness
+  setBackgroundColorById("number-input", correctAnswerValue.number ? "green" : "red");
+  setBackgroundColorById("unit", correctAnswerValue.unit ? "green" : "red");
+
+  // BUTTON HANDLING (NEXT, SOLUTION, & SUBMIT BUTTONS)
+  // Function to enable buttons and disable the submit button
+  const enableButtonsAndDisableSubmit = () => {
+    // Set object 'e' to reference different buttons via their IDs
+    const e = {
+      next: document.getElementById("next-button"),
+      solution: document.getElementById("btn-check"),
+      submit: document.getElementById("submit-button")
+    }; // Check if all buttons are present on page
+    if (e.next && e.solution && e.submit) {
+      // Enable the 'next' and 'solution' and disable 'submit' buttons
+      e.next.disabled = e.solution.disabled = false;
+      e.submit.disabled = true;
+    } // Call function
+  }; enableButtonsAndDisableSubmit();
+
+  // SOLUTION CARD
+  // Add event listener to the solution checkbox
+  document.getElementById("btn-check").addEventListener("change", function () {
+    // Toggle solution div display based on the checkbox status
+    document.getElementById("solution-div").style.display = this.checked ? "block" : "none";
+  });
+</script>
+{% endblock %}

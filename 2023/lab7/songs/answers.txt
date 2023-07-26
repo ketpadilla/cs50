@@ -1,0 +1,11 @@
+If songs.db does contain the necessary data to calculate the audio aura as done by Spotify,
+theoretically speaking, it should be characterized by the following sqlite 3 syntax:
+SELECT AVG(energy+valence+danceability) FROM songs;.
+
+Hypothesizing that this method of calculating such aura is not representative of the listener,
+the method should also account for: how long the listerner listened to each song;
+how many times the listerner listened to each song; and many more.
+
+The method could also be revised to utilize a more dynamic system of calculating audio aura.
+Such an example would be using machine learning to account for variables that cannot be
+mathematically expressed like the listerner's personality, demographic information, and more.

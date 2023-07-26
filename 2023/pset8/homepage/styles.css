@@ -1,0 +1,28 @@
+/* Define variables */
+:root {
+    --background-color: #141414; /* Background color for the body */
+    --text-color: #fff; /* Text color */
+    --font-size: 1rem; /* Default font size */
+    --font-weight: 400; /* Default font weight */
+    --line-height: 1.5; /* Default line height */
+    --container-margin-top: 50px; /* Top margin for the container */
+  }
+
+  /* Navigation Bar */
+  .custom-navbar {
+    padding-left: 20px; /* Adjust the value as per your needs */
+  }
+
+  .navbar {
+    margin-bottom: 20px; /* Adjust the value as needed */
+  }
+
+  /* Body */
+  body {
+    background-color: var(--background-color); /* Use the defined background color variable */
+    color: var(--text-color); /* Use the defined text color variable */
+  }
+
+  .container {
+    margin-top: var(--container-margin-top); /* Use the defined container top margin variable */
+  }
